@@ -20,8 +20,8 @@ class GetCurrencyListUseCase @Inject constructor(
             if (response.isSuccessful) {
                 val result = response.body()
                 result?.let {
-                    val requestStatus = mapCurrencyResponseDtoToListOfCurrency(it)
-                    emit(Resource.Success(requestStatus))
+                    val currencyList = mapCurrencyResponseDtoToListOfCurrency(it)
+                    emit(Resource.Success(currencyList))
                 }
             }
         } catch (e: IOException) {

@@ -2,6 +2,7 @@ package com.javeria.currencyconverter.presentation.ui.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -14,13 +15,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.javeria.currencyconverter.presentation.state.HomeUiState
+import com.javeria.currencyconverter.data.local.model.Currency
+import com.javeria.currencyconverter.presentation.state.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenUi(
     modifier: Modifier = Modifier,
-    homeUiState: HomeUiState
+    uiState: UiState,
+    baseCurrencySelected: (Currency) -> Unit = {},
+    targetCurrencySelected: (Currency) -> Unit = {},
+    convertButtonClicked: (String) -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -37,17 +42,18 @@ fun HomeScreenUi(
         },
     ) { innerPadding ->
         Column(Modifier.padding(innerPadding)) {
-            RequestStatusUi(requestStatusUiState = homeUiState.requestStatusUiState)
+            RequestStatusUi(requestStatusUiState = uiState.requestStatusUiState)
             Spacer(modifier = Modifier.padding(12.dp))
             HorizontalDivider()
             CurrencyCoverterUi(
-                homeUiState.currencyConverterUiState,
-                homeUiState.amount,
-                homeUiState.baseCurrencySelected,
-                homeUiState.targetCurrencySelected,
-                homeUiState.convertButtonClicked
+                converterUiState = uiState.currencyConverterUiState,
+                amount = uiState.amount,
+                baseCurrencySelected = baseCurrencySelected,
+                targetCurrencySelected = targetCurrencySelected,
+                convertButtonClicked = { amount -> convertButtonClicked(amount) },
             )
         }
+        QuotedRateUi(modifier = Modifier.fillMaxSize(), quotedConverterUiState = uiState.quotedState)
     }
 }
 
@@ -56,11 +62,9 @@ fun HomeScreenUi(
 @Composable
 fun HomeScreenPreview() {
     HomeScreenUi(
-        Modifier,
-        HomeUiState(
-            amount = "",
-            baseCurrencySelected = {},
-            targetCurrencySelected = {},
-            convertButtonClicked = {})
-    )
+        modifier = Modifier,
+        uiState = UiState(),
+        baseCurrencySelected = {},
+        targetCurrencySelected = {},
+        convertButtonClicked = {})
 }

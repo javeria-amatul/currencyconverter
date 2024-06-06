@@ -25,19 +25,22 @@ fun DropdownUi(
     selectedValue: String,
     currency: List<Currency>,
     label: String,
-    onValueChangedEvent: (String) -> Unit,
+    onValueChangedEvent: (Currency) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var textVal by remember { mutableStateOf(selectedValue) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
-        modifier = modifier.fillMaxWidth().padding(12.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(12.dp)
     ) {
         OutlinedTextField(
             readOnly = true,
-            value = selectedValue,
+            value = textVal,
             onValueChange = {},
             label = { Text(text = label) },
             trailingIcon = {
@@ -51,12 +54,12 @@ fun DropdownUi(
 
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             currency.forEach { currency: Currency ->
-                val textVal = "${currency.name}  ${currency.symbol} ${currency.name}"
                 DropdownMenuItem(
-                    text = { Text(text = textVal) },
+                    text = { Text(text = "${currency.symbol} ${currency.name} (${currency.code})") },
                     onClick = {
+                        textVal = "${currency.symbol} ${currency.name} (${currency.code})"
                         expanded = false
-                        onValueChangedEvent(currency.name)
+                        onValueChangedEvent(currency)
                     }
                 )
             }

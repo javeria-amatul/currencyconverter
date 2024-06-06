@@ -11,7 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.javeria.currencyconverter.presentation.state.HomeViewModel
+import com.javeria.currencyconverter.presentation.CurrencyConverterEvent
+import com.javeria.currencyconverter.presentation.state.MainViewModel
 import com.javeria.currencyconverter.presentation.ui.screen.HomeScreenUi
 import com.javeria.currencyconverter.presentation.ui.theme.CurrencyConverterTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,28 @@ class MainActivity : ComponentActivity() {
         setContent {
             val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle(lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current)
             CurrencyConverterTheme {
-                HomeScreenUi(homeUiState = uiState)
+                HomeScreenUi(uiState = uiState,
+                    baseCurrencySelected = {
+                        viewModel.dispatch(
+                            CurrencyConverterEvent.BaseCurrencySelected(
+                                it
+                            )
+                        )
+                    },
+                    targetCurrencySelected = {
+                        viewModel.dispatch(
+                            CurrencyConverterEvent.TargetCurrencySelected(
+                                it
+                            )
+                        )
+                    },
+                    convertButtonClicked = {
+                        viewModel.dispatch(
+                            CurrencyConverterEvent.ConvertCurrencyClicked(
+                                it
+                            )
+                        )
+                    })
             }
         }
     }

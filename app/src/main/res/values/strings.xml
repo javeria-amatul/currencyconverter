@@ -7,11 +7,14 @@
     <string name="approved_transactions_heading">Recent approved transactions</string>
     <string name="quoted_conversion_rate">Quoted conversion: </string>
     <string name="something_went_wrong">Something went wrong</string>
-    <string name="approve_button">Approve</string>
+    <string name="convert_button">Convert</string>
     <string name="amount_heading">Convert amount:</string>
     <string name="amount_label">Amount</string>
     <string name="quoted_conversion">Quoted conversion amount:</string>
     <string name="base_currency">Base currency</string>
     <string name="target_currency">Target currency</string>
     <string name="currency_list_unavailable">Currency list unavailable</string>
+    <string name="latest_exchange_heading">Latest exchange rate</string>
+    <string name="approve">Approve</string>
+    <string name="deny">Deny</string>
 </resources>
