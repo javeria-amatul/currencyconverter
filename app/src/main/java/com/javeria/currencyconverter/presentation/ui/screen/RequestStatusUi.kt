@@ -26,7 +26,7 @@ import com.javeria.currencyconverter.presentation.state.RequestStatusUiState
 fun RequestStatusUi(modifier: Modifier = Modifier, requestStatusUiState: RequestStatusUiState) {
 
     Surface(
-        modifier = modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small
+        modifier = modifier.fillMaxWidth().padding(18.dp), shape = MaterialTheme.shapes.small
     ) {
         Column(
             modifier = Modifier,
@@ -35,7 +35,7 @@ fun RequestStatusUi(modifier: Modifier = Modifier, requestStatusUiState: Request
         ) {
             Text(
                 modifier = Modifier.padding(bottom = 8.dp),
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.titleLarge,
                 text = stringResource(id = R.string.request_status_heading),
                 textAlign = TextAlign.Center
             )
@@ -51,6 +51,10 @@ fun RequestStatusUi(modifier: Modifier = Modifier, requestStatusUiState: Request
 
                 is RequestStatusUiState.RequestStatusContent -> {
                     RequestStatusSuccessUI(requestStatus = (requestStatusUiState.requestStatus))
+                }
+
+                RequestStatusUiState.Error -> {
+                    GenericErrorUi()
                 }
             }
         }

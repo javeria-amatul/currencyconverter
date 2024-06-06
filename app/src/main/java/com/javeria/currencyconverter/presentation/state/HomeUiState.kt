@@ -10,5 +10,6 @@ data class HomeUiState(val requestStatusUiState: RequestStatusUiState = RequestS
 
 sealed class RequestStatusUiState {
     object Loading: RequestStatusUiState()
+    object Error: RequestStatusUiState()
     data class RequestStatusContent(val requestStatus: RequestStatus): RequestStatusUiState()
 }

@@ -21,11 +21,19 @@ class HomeViewModel @Inject constructor(
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
     init {
+        getRequestStatus()
+    }
+
+    private fun getRequestStatus() {
         viewModelScope.launch {
             requestStatusUseCase().collect { requestStatus ->
                 when (requestStatus) {
                     is Resource.Error -> {
-
+                        emitState {
+                            copy(
+                                requestStatusUiState = RequestStatusUiState.Error
+                            )
+                        }
                     }
 
                     is Resource.Loading -> {
@@ -33,20 +41,14 @@ class HomeViewModel @Inject constructor(
                             copy(
                                 requestStatusUiState = RequestStatusUiState.Loading
                             )
-                         }
+                        }
                     }
 
                     is Resource.Success -> {
                         requestStatus.data?.let {
                             emitState {
                                 copy(
-                                    requestStatusUiState = RequestStatusUiState.RequestStatusContent(
-                                        RequestStatus(
-                                            it.quotas.month.used ?: 0,
-                                            it.quotas.month.used ?: 0,
-                                            it.quotas.month.used ?: 0
-                                        )
-                                    )
+                                    requestStatusUiState = RequestStatusUiState.RequestStatusContent(it)
                                 )
                             }
                         }

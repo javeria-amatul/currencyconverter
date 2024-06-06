@@ -11,8 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.javeria.currencyconverter.presentation.ui.screen.RequestStatusUi
 import com.javeria.currencyconverter.presentation.state.HomeViewModel
+import com.javeria.currencyconverter.presentation.ui.screen.HomeScreenUi
 import com.javeria.currencyconverter.presentation.ui.theme.CurrencyConverterTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,9 +26,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle(lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current)
-
             CurrencyConverterTheme {
-                RequestStatusUi(requestStatusUiState = uiState.requestStatusUiState)
+                HomeScreenUi(homeUiState = uiState)
             }
         }
     }
@@ -37,8 +36,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
-        modifier = modifier
+        text = "Hello $name!", modifier = modifier
     )
 }
 
