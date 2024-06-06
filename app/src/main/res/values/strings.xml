@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Currency Converter</string>
+    <string name="request_status_heading">Request status for current month</string>
+    <string name="remaining">Remaining</string>
+    <string name="used">Used</string>
+    <string name="total">Total</string>
+    <string name="approved_transactions_heading">Recent approved transactions</string>
+    <string name="quoted_conversion_rate">Quoted conversion: </string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="approve_button">Approve</string>
+    <string name="amount_heading">Convert amount:</string>
+    <string name="amount_label">Amount</string>
+    <string name="quoted_conversion">Quoted conversion amount:</string>
+    <string name="source_currency">Source currency</string>
+    <string name="target_currency">Target currency</string>
+</resources>
