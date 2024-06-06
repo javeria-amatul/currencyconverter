@@ -22,7 +22,8 @@ fun HomeScreenUi(
     modifier: Modifier = Modifier,
     homeUiState: HomeUiState
 ) {
-    Scaffold(modifier = modifier,
+    Scaffold(
+        modifier = modifier,
         topBar = {
             MediumTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -39,6 +40,13 @@ fun HomeScreenUi(
             RequestStatusUi(requestStatusUiState = homeUiState.requestStatusUiState)
             Spacer(modifier = Modifier.padding(12.dp))
             HorizontalDivider()
+            CurrencyCoverterUi(
+                homeUiState.currencyConverterUiState,
+                homeUiState.amount,
+                homeUiState.baseCurrencySelected,
+                homeUiState.targetCurrencySelected,
+                homeUiState.convertButtonClicked
+            )
         }
     }
 }
@@ -47,5 +55,12 @@ fun HomeScreenUi(
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreenUi(Modifier, HomeUiState())
+    HomeScreenUi(
+        Modifier,
+        HomeUiState(
+            amount = "",
+            baseCurrencySelected = {},
+            targetCurrencySelected = {},
+            convertButtonClicked = {})
+    )
 }

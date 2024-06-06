@@ -11,6 +11,7 @@
     <string name="amount_heading">Convert amount:</string>
     <string name="amount_label">Amount</string>
     <string name="quoted_conversion">Quoted conversion amount:</string>
-    <string name="source_currency">Source currency</string>
+    <string name="base_currency">Base currency</string>
     <string name="target_currency">Target currency</string>
+    <string name="currency_list_unavailable">Currency list unavailable</string>
 </resources>

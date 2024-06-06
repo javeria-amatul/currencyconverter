@@ -2,8 +2,8 @@ package com.javeria.currencyconverter.presentation.state
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.javeria.currencyconverter.data.local.model.RequestStatus
 import com.javeria.currencyconverter.domain.common.Resource
+import com.javeria.currencyconverter.domain.usecase.GetCurrencyListUseCase
 import com.javeria.currencyconverter.domain.usecase.GetRequestStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val requestStatusUseCase: GetRequestStatusUseCase
+    private val requestStatusUseCase: GetRequestStatusUseCase,
+    private val currencyListUseCase: GetCurrencyListUseCase
 ) : ViewModel() {
 
     private val _uiStateFlow: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
@@ -22,6 +23,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         getRequestStatus()
+        getCurrencyList()
     }
 
     private fun getRequestStatus() {
@@ -48,9 +50,41 @@ class HomeViewModel @Inject constructor(
                         requestStatus.data?.let {
                             emitState {
                                 copy(
-                                    requestStatusUiState = RequestStatusUiState.RequestStatusContent(it)
+                                    requestStatusUiState = RequestStatusUiState.RequestStatusContent(
+                                        it
+                                    )
                                 )
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getCurrencyList() {
+        viewModelScope.launch {
+            currencyListUseCase.invoke().collect { currenncyList ->
+                when(currenncyList) {
+                    is Resource.Error -> {
+                        emitState {
+                            copy(
+                                currencyConverterUiState = CurrencyConverterUiState.Error
+                            )
+                        }
+                    }
+                    is Resource.Loading -> {
+                        emitState {
+                            copy(
+                                currencyConverterUiState = CurrencyConverterUiState.Loading
+                            )
+                        }
+                    }
+                    is Resource.Success -> {
+                        emitState {
+                            copy(
+                                currencyConverterUiState = CurrencyConverterUiState.CurrencyListSuccess(currenncyList.data)
+                            )
                         }
                     }
                 }
