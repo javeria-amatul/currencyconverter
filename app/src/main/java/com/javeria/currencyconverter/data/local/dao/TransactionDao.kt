@@ -9,8 +9,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TransactionDao {
+
     @Query("SELECT * FROM `transaction`")
     fun getAllTransactions(): Flow<List<Transaction>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(data: Transaction)
+
 }
