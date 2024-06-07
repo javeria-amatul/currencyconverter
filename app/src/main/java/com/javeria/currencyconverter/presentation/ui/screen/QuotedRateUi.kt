@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -47,8 +48,19 @@ fun QuotedRateUi(
             Column {
                 if (openDialog.value) {
                     AlertDialog(onDismissRequest = { openDialog.value = false },
-                        title = { Text(text = stringResource(id = R.string.latest_exchange_heading)) },
-                        text = { Text("${quotedConverterUiState.quotedRate?.perUnitConversion} \n  ${quotedConverterUiState.quotedRate?.totalAmountConversion}") },
+                        title = {
+                            Text(
+                                text = stringResource(id = R.string.latest_exchange_heading),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        },
+                        text = {
+                            Text(
+                                "${quotedConverterUiState.quotedRate?.perUnitConversion}" +
+                                        "\n${quotedConverterUiState.quotedRate?.totalAmountConversion}",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        },
                         confirmButton = {
                             Button(onClick = {
                                 quotedConverterUiState.quotedRate?.let {

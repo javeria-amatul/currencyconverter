@@ -2,6 +2,7 @@ package com.javeria.currencyconverter.domain.mapper
 
 import com.javeria.currencyconverter.data.local.model.QuotedRate
 import com.javeria.currencyconverter.data.remote.dto.LatestExchangeRateDto
+import com.javeria.currencyconverter.roundTo
 import javax.inject.Inject
 
 class MapLatestExchangeResponseDtoToConversionModel @Inject constructor() {
@@ -49,8 +50,9 @@ class MapLatestExchangeResponseDtoToConversionModel @Inject constructor() {
         if (from.data.zar > 0f) exchangeRate = from.data.zar
 
         val totalAmount = exchangeRate.times(amount)
-        val perUnitConversion = "1${baseCurrencySymbol} = ${exchangeRate}${targetCurrencySymbol}"
-        val total = "Total: ${amount}${baseCurrencySymbol} = ${totalAmount}${targetCurrencySymbol}"
+        val perUnit = 1.00f
+        val perUnitConversion = "$perUnit${baseCurrencySymbol} = ${exchangeRate.roundTo(2)}${targetCurrencySymbol}"
+        val total = "Total: ${amount.roundTo(2)}${baseCurrencySymbol} = ${totalAmount.roundTo(2)}${targetCurrencySymbol}"
         return QuotedRate(perUnitConversion = perUnitConversion, totalAmountConversion = total)
     }
 }

@@ -9,5 +9,5 @@ sealed class CurrencyConverterEvent {
     data class ConvertCurrencyClicked(val amount: String) :
         CurrencyConverterEvent()
     data object DialogDismissOrTransactionDenied : CurrencyConverterEvent()
-    data class SaveConversionInLocal(val conversion: QuotedRate) : CurrencyConverterEvent()
+    data class SaveConversionInLocal(val quotedRate: QuotedRate) : CurrencyConverterEvent()
 }

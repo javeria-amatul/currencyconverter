@@ -3,15 +3,20 @@ package com.javeria.currencyconverter.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.javeria.currencyconverter.data.local.model.Conversion
+import com.javeria.currencyconverter.data.local.model.QuotedRate
 import com.javeria.currencyconverter.domain.common.Resource
+import com.javeria.currencyconverter.domain.usecase.GetApprovedTransactions
 import com.javeria.currencyconverter.domain.usecase.GetCurrencyListUseCase
 import com.javeria.currencyconverter.domain.usecase.GetLatestExchangeRateUseCase
 import com.javeria.currencyconverter.domain.usecase.GetRequestStatusUseCase
+import com.javeria.currencyconverter.domain.usecase.SaveApprovedTransactions
 import com.javeria.currencyconverter.presentation.viewstate.CurrencyConverterUiState
 import com.javeria.currencyconverter.presentation.viewstate.QuotedConverterUiState
 import com.javeria.currencyconverter.presentation.viewstate.RequestStatusUiState
 import com.javeria.currencyconverter.presentation.viewstate.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -23,6 +28,8 @@ class MainViewModel @Inject constructor(
     private val requestStatusUseCase: GetRequestStatusUseCase,
     private val currencyListUseCase: GetCurrencyListUseCase,
     private val getLatestExchangeRateUseCase: GetLatestExchangeRateUseCase,
+    private val saveApprovedTransactions: SaveApprovedTransactions,
+    private val getApprovedTransactions: GetApprovedTransactions
 ) : ViewModel() {
 
     private val _uiStateFlow: MutableStateFlow<UiState> = MutableStateFlow(UiState())
@@ -65,11 +72,21 @@ class MainViewModel @Inject constructor(
             }
 
             is CurrencyConverterEvent.SaveConversionInLocal -> {
-
+                saveTransaction(event.quotedRate)
             }
         }
     }
 
+    private fun saveTransaction(quotedRate: QuotedRate) {
+        saveApprovedTransactions(quotedRate)
+        getTransaction()
+    }
+
+    private fun getTransaction() {
+        CoroutineScope(Dispatchers.IO).launch {
+            getApprovedTransactions()
+        }
+    }
 
     private fun getConversion() {
         viewModelScope.launch {
