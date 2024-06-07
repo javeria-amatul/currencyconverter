@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.javeria.currencyconverter.presentation.CurrencyConverterEvent
-import com.javeria.currencyconverter.presentation.state.MainViewModel
+import com.javeria.currencyconverter.presentation.MainViewModel
 import com.javeria.currencyconverter.presentation.ui.screen.HomeScreenUi
 import com.javeria.currencyconverter.presentation.ui.theme.CurrencyConverterTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,6 +49,8 @@ class MainActivity : ComponentActivity() {
                                 it
                             )
                         )
+                    }, approveConversion = {
+                        viewModel.dispatch(CurrencyConverterEvent.SaveConversionInLocal(it))
                     })
             }
         }

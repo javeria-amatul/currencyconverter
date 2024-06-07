@@ -49,6 +49,8 @@ class MapLatestExchangeResponseDtoToConversionModel @Inject constructor() {
         if (from.data.zar > 0f) exchangeRate = from.data.zar
 
         val totalAmount = exchangeRate.times(amount)
-        return QuotedRate(exchangeRate, amount, totalAmount, baseCurrencySymbol, targetCurrencySymbol)
+        val perUnitConversion = "1${baseCurrencySymbol} = ${exchangeRate}${targetCurrencySymbol}"
+        val total = "Total: ${amount}${baseCurrencySymbol} = ${totalAmount}${targetCurrencySymbol}"
+        return QuotedRate(perUnitConversion = perUnitConversion, totalAmountConversion = total)
     }
 }

@@ -25,9 +25,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.javeria.currencyconverter.R
 import com.javeria.currencyconverter.data.local.model.Currency
-import com.javeria.currencyconverter.presentation.state.AmountState
-import com.javeria.currencyconverter.presentation.state.AmountStateSaver
-import com.javeria.currencyconverter.presentation.state.CurrencyConverterUiState
+import com.javeria.currencyconverter.presentation.viewstate.AmountState
+import com.javeria.currencyconverter.presentation.viewstate.AmountStateSaver
+import com.javeria.currencyconverter.presentation.viewstate.CurrencyConverterUiState
 
 
 @Composable

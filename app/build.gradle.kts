@@ -94,11 +94,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     //Hilt
-//    implementation(libs.hilt.android)
-//    kapt(libs.hilt.android.compiler)
-
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     //Retrofit
     implementation (libs.retrofit)
@@ -106,6 +103,7 @@ dependencies {
     implementation (libs.logging.interceptor)
     //Lifecycle compose
     implementation( libs.androidx.lifecycle.runtime.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

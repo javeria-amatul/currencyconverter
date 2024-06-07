@@ -1,4 +1,4 @@
-package com.javeria.currencyconverter.presentation.state
+package com.javeria.currencyconverter.presentation.viewstate
 
 
 import java.util.regex.Pattern

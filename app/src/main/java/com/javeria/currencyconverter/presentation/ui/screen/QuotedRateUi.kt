@@ -17,11 +17,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.javeria.currencyconverter.R
-import com.javeria.currencyconverter.presentation.state.QuotedConverterUiState
+import com.javeria.currencyconverter.data.local.model.QuotedRate
+import com.javeria.currencyconverter.presentation.viewstate.QuotedConverterUiState
 
 @Composable
-fun QuotedRateUi(quotedConverterUiState: QuotedConverterUiState?, modifier: Modifier = Modifier) {
-    val openDialog = remember { mutableStateOf(false) }
+fun QuotedRateUi(
+    quotedConverterUiState: QuotedConverterUiState?,
+    approveConversion: (QuotedRate) -> Unit,
+    modifier: Modifier = Modifier
+) {
+
     when (quotedConverterUiState) {
         QuotedConverterUiState.Error -> {
             Toast.makeText(LocalContext.current, "Something went wrong", Toast.LENGTH_SHORT).show()
@@ -37,37 +42,37 @@ fun QuotedRateUi(quotedConverterUiState: QuotedConverterUiState?, modifier: Modi
         }
 
         is QuotedConverterUiState.QuotedRateSuccess -> {
+
+            val openDialog = remember { mutableStateOf(quotedConverterUiState.showDialog) }
             Column {
-                val message =
-                    "1${quotedConverterUiState.quotedRate?.baseCurrencySymbol} = ${quotedConverterUiState.quotedRate?.quotedConversionRate}${quotedConverterUiState.quotedRate?.targetCurrencySymbol}\n" +
-                            "Total: ${quotedConverterUiState.quotedRate?.baseAmount}${quotedConverterUiState.quotedRate?.baseCurrencySymbol} = ${quotedConverterUiState.quotedRate?.totalAmount}${quotedConverterUiState.quotedRate?.targetCurrencySymbol}"
                 if (openDialog.value) {
                     AlertDialog(onDismissRequest = { openDialog.value = false },
                         title = { Text(text = stringResource(id = R.string.latest_exchange_heading)) },
-                        text = { Text(message) },
+                        text = { Text("${quotedConverterUiState.quotedRate?.perUnitConversion} \n  ${quotedConverterUiState.quotedRate?.totalAmountConversion}") },
                         confirmButton = {
-                            Button(
-                                onClick = {
-                                    openDialog.value = false
-                                }) {
+                            Button(onClick = {
+                                quotedConverterUiState.quotedRate?.let {
+                                    approveConversion(it)
+
+                                }
+                                openDialog.value = false
+                            }) {
                                 Text(stringResource(id = R.string.approve))
                             }
                         },
                         dismissButton = {
-                            Button(
-                                onClick = {
-                                    openDialog.value = false
-                                }) {
+                            Button(onClick = {
+                                openDialog.value = false
+                            }) {
                                 Text(stringResource(id = R.string.deny))
                             }
-                        }
-                    )
+                        })
                 }
             }
         }
 
         else -> {
-            openDialog.value = true
+
         }
     }
 }

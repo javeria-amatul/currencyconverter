@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.javeria.currencyconverter.R
 import com.javeria.currencyconverter.data.local.model.RequestStatus
-import com.javeria.currencyconverter.presentation.state.RequestStatusUiState
+import com.javeria.currencyconverter.presentation.viewstate.RequestStatusUiState
 
 
 @Composable

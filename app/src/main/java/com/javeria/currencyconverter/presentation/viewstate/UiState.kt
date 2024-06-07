@@ -1,4 +1,4 @@
-package com.javeria.currencyconverter.presentation.state
+package com.javeria.currencyconverter.presentation.viewstate
 
 import com.javeria.currencyconverter.data.local.model.Currency
 import com.javeria.currencyconverter.data.local.model.QuotedRate
@@ -8,13 +8,15 @@ import com.javeria.currencyconverter.data.local.model.RequestStatus
 data class UiState(
     val requestStatusUiState: RequestStatusUiState = RequestStatusUiState.Loading,
     val currencyConverterUiState: CurrencyConverterUiState = CurrencyConverterUiState.Loading,
-    val quotedState: QuotedConverterUiState? = null,
+    var quotedState: QuotedConverterUiState? = null,
+    val approvedTransactions: List<QuotedRate>? = null,
     val amount: String = "",
     val baseCurrency: Currency? = null,
     val targetCurrency: Currency? = null,
     val baseCurrencySelected: (Currency) -> Unit = {},
     val targetCurrencySelected: (Currency) -> Unit = {},
-    val convertButtonClicked: () -> Unit = {}
+    val convertButtonClicked: () -> Unit = {},
+    val onDialogDismissOrDenyTransaction: () -> Unit = {}
 )
 
 
@@ -34,5 +36,5 @@ sealed class CurrencyConverterUiState {
 sealed class QuotedConverterUiState {
     data object Loading : QuotedConverterUiState()
     data object Error : QuotedConverterUiState()
-    data class QuotedRateSuccess(val quotedRate: QuotedRate?) : QuotedConverterUiState()
+    data class QuotedRateSuccess(val quotedRate: QuotedRate? = null,  val showDialog: Boolean) : QuotedConverterUiState()
 }

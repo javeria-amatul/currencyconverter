@@ -1,4 +1,4 @@
-package com.javeria.currencyconverter.presentation.state
+package com.javeria.currencyconverter.presentation.viewstate
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

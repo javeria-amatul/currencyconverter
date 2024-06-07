@@ -1,4 +1,4 @@
-package com.javeria.currencyconverter.presentation.state
+package com.javeria.currencyconverter.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,22 +7,25 @@ import com.javeria.currencyconverter.domain.common.Resource
 import com.javeria.currencyconverter.domain.usecase.GetCurrencyListUseCase
 import com.javeria.currencyconverter.domain.usecase.GetLatestExchangeRateUseCase
 import com.javeria.currencyconverter.domain.usecase.GetRequestStatusUseCase
-import com.javeria.currencyconverter.presentation.CurrencyConverterEvent
+import com.javeria.currencyconverter.presentation.viewstate.CurrencyConverterUiState
+import com.javeria.currencyconverter.presentation.viewstate.QuotedConverterUiState
+import com.javeria.currencyconverter.presentation.viewstate.RequestStatusUiState
+import com.javeria.currencyconverter.presentation.viewstate.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val requestStatusUseCase: GetRequestStatusUseCase,
     private val currencyListUseCase: GetCurrencyListUseCase,
-    private val getLatestExchangeRateUseCase: GetLatestExchangeRateUseCase
+    private val getLatestExchangeRateUseCase: GetLatestExchangeRateUseCase,
 ) : ViewModel() {
 
     private val _uiStateFlow: MutableStateFlow<UiState> = MutableStateFlow(UiState())
-
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
     init {
@@ -54,8 +57,19 @@ class MainViewModel @Inject constructor(
                     )
                 }
             }
+
+            CurrencyConverterEvent.DialogDismissOrTransactionDenied -> emitState {
+                copy(
+                    quotedState = QuotedConverterUiState.QuotedRateSuccess(showDialog = false)
+                )
+            }
+
+            is CurrencyConverterEvent.SaveConversionInLocal -> {
+
+            }
         }
     }
+
 
     private fun getConversion() {
         viewModelScope.launch {
@@ -91,7 +105,7 @@ class MainViewModel @Inject constructor(
                                 emitState {
                                     copy(
                                         quotedState = QuotedConverterUiState.QuotedRateSuccess(
-                                            quotedRateState.data
+                                            quotedRateState.data, true
                                         )
                                     )
                                 }
