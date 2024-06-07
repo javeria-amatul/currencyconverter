@@ -1,31 +1,19 @@
 package com.javeria.currencyconverter.data.local.repository
 
-import com.javeria.currencyconverter.data.local.AppDatabase
 import com.javeria.currencyconverter.data.local.Transaction
-import com.javeria.currencyconverter.data.local.mapper.MapTransactionsDaoToQuotedRate
-import com.javeria.currencyconverter.data.local.model.QuotedRate
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
-class TransactionRepository @Inject constructor(
-    private val appDatabase: AppDatabase,
-    private val mapTransactionsDaoToQuotedRate: MapTransactionsDaoToQuotedRate
-) {
+/**
+ * Repository that provides insert and retrieve of [Transaction] from a given data source.
+ */
+interface TransactionRepository {
+    /**
+     * Retrieve all the items from the the given data source.
+     */
+    fun getAllTransactionsStream(): Flow<List<Transaction>>
 
-    fun getTransaction(): List<QuotedRate> {
-        val transactionsInDb = appDatabase.transactionDao().getAll()
-        val listOfQuotedRate = arrayListOf<QuotedRate>()
-        transactionsInDb.forEach { transaction ->
-            listOfQuotedRate.add(mapTransactionsDaoToQuotedRate.invoke(transaction))
-        }
-        return listOfQuotedRate
-    }
-
-
-    fun saveTransaction(quotedRate: QuotedRate) {
-        val transaction = Transaction(
-            perUnitConversion = quotedRate.perUnitConversion,
-            total = quotedRate.totalAmountConversion
-        )
-        appDatabase.transactionDao().insert(transaction)
-    }
+    /**
+     * Insert transaction in the data source
+     */
+    suspend fun insertTransaction(item: Transaction)
 }

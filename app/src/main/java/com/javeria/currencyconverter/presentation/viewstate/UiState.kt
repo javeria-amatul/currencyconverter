@@ -9,14 +9,15 @@ data class UiState(
     val requestStatusUiState: RequestStatusUiState = RequestStatusUiState.Loading,
     val currencyConverterUiState: CurrencyConverterUiState = CurrencyConverterUiState.Loading,
     var quotedState: QuotedConverterUiState? = null,
-    val approvedTransactions: List<QuotedRate>? = null,
+    val approvedTransactionsState: ApprovedTransactionsState = ApprovedTransactionsState.NoData,
     val amount: String = "",
     val baseCurrency: Currency? = null,
     val targetCurrency: Currency? = null,
     val baseCurrencySelected: (Currency) -> Unit = {},
     val targetCurrencySelected: (Currency) -> Unit = {},
     val convertButtonClicked: () -> Unit = {},
-    val onDialogDismissOrDenyTransaction: () -> Unit = {}
+    val recentTransactionsClicked: (Boolean) -> Unit = {},
+    val showBottomSheet: Boolean = false
 )
 
 

@@ -16,6 +16,8 @@
     <string name="currency_list_unavailable">Currency list unavailable</string>
     <string name="latest_exchange_heading">Latest exchange rate</string>
     <string name="approve">Approve</string>
+    <string name="approved_transactions">Approved Transactions</string>
     <string name="deny">Deny</string>
     <string name="recent_transactions">Recent transactions</string>
+    <string name="no_recent_transactions">No recent transactions</string>
 </resources>

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.javeria.currencyconverter.R
 import com.javeria.currencyconverter.data.local.model.Currency
 import com.javeria.currencyconverter.data.local.model.QuotedRate
+import com.javeria.currencyconverter.presentation.viewstate.ApprovedTransactionsState
 import com.javeria.currencyconverter.presentation.viewstate.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,8 +33,12 @@ fun HomeScreenUi(
     targetCurrencySelected: (Currency) -> Unit = {},
     convertButtonClicked: (String) -> Unit = {},
     approveConversion: (QuotedRate) -> Unit = {},
-    recentTransactionsClicked: () -> Unit = {}
-) {
+    recentTransactionsClicked: () -> Unit = {},
+    bottomSheetDismissed: () -> Unit = {}
+ ) {
+    if (uiState.showBottomSheet) {
+        ApprovedTransactionsUi(bottomSheetDismissed, uiState.approvedTransactionsState)
+    }
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -59,20 +64,23 @@ fun HomeScreenUi(
                 targetCurrencySelected = targetCurrencySelected,
                 convertButtonClicked = { amount -> convertButtonClicked(amount) },
             )
-        }
-        QuotedRateUi(
-            modifier = Modifier.fillMaxSize(),
-            quotedConverterUiState = uiState.quotedState,
-            approveConversion = approveConversion
-        )
-        HorizontalDivider()
-        if (!uiState.approvedTransactions.isNullOrEmpty()) {
-            Button(modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-                onClick = recentTransactionsClicked) {
-                Text(stringResource(id = R.string.convert_button))
+            QuotedRateUi(
+                modifier = Modifier.fillMaxSize(),
+                quotedConverterUiState = uiState.quotedState,
+                approveConversion = approveConversion
+            )
+
+            if ((uiState.approvedTransactionsState is ApprovedTransactionsState.Content)) {
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    onClick = recentTransactionsClicked
+                ) {
+                    Text(stringResource(id = R.string.approved_transactions))
+                }
             }
+
         }
     }
 }

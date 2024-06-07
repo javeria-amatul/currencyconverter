@@ -49,9 +49,12 @@ class MainActivity : ComponentActivity() {
                                 it
                             )
                         )
-                    }, approveConversion = {
+                    },
+                    approveConversion = {
                         viewModel.dispatch(CurrencyConverterEvent.SaveConversionInLocal(it))
-                    })
+                    },
+                    recentTransactionsClicked = { viewModel.dispatch(CurrencyConverterEvent.ApprovedTransactionsClicked) },
+                    bottomSheetDismissed = { viewModel.dispatch(CurrencyConverterEvent.BottomSheetDismissed) })
             }
         }
     }

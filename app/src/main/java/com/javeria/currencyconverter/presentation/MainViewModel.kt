@@ -10,13 +10,12 @@ import com.javeria.currencyconverter.domain.usecase.GetCurrencyListUseCase
 import com.javeria.currencyconverter.domain.usecase.GetLatestExchangeRateUseCase
 import com.javeria.currencyconverter.domain.usecase.GetRequestStatusUseCase
 import com.javeria.currencyconverter.domain.usecase.SaveApprovedTransactions
+import com.javeria.currencyconverter.presentation.viewstate.ApprovedTransactionsState
 import com.javeria.currencyconverter.presentation.viewstate.CurrencyConverterUiState
 import com.javeria.currencyconverter.presentation.viewstate.QuotedConverterUiState
 import com.javeria.currencyconverter.presentation.viewstate.RequestStatusUiState
 import com.javeria.currencyconverter.presentation.viewstate.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -38,6 +37,7 @@ class MainViewModel @Inject constructor(
     init {
         getRequestStatus()
         getCurrencyList()
+        getRecentTransactions()
     }
 
     fun dispatch(event: CurrencyConverterEvent) {
@@ -54,7 +54,7 @@ class MainViewModel @Inject constructor(
                 emitState {
                     copy(amount = event.amount, convertButtonClicked = { event.amount })
                 }
-                getConversion()
+                getLatestConversion()
             }
 
             is CurrencyConverterEvent.TargetCurrencySelected -> {
@@ -74,27 +74,33 @@ class MainViewModel @Inject constructor(
             is CurrencyConverterEvent.SaveConversionInLocal -> {
                 saveTransaction(event.quotedRate)
             }
+
+            CurrencyConverterEvent.ApprovedTransactionsClicked -> {
+                emitState {
+                    copy(
+                        showBottomSheet = true
+                    )
+                }
+            }
+
+            CurrencyConverterEvent.BottomSheetDismissed -> {
+                emitState {
+                    copy(
+                        showBottomSheet = false
+                    )
+                }
+            }
         }
     }
 
     private fun saveTransaction(quotedRate: QuotedRate) {
         saveApprovedTransactions(quotedRate)
-        getTransaction()
     }
 
-    private fun getTransaction() {
-        CoroutineScope(Dispatchers.IO).launch {
-            getApprovedTransactions()
-        }
-    }
-
-    private fun getConversion() {
+    private fun getLatestConversion() {
         viewModelScope.launch {
             try {
-                if (uiStateFlow.value.baseCurrency != null
-                    && uiStateFlow.value.targetCurrency != null
-                    && uiStateFlow.value.amount.toFloat() > 0f
-                ) {
+                if (uiStateFlow.value.baseCurrency != null && uiStateFlow.value.targetCurrency != null && uiStateFlow.value.amount.toFloat() > 0f) {
                     val conversion = Conversion(
                         uiStateFlow.value.amount.toFloat(),
                         uiStateFlow.value.baseCurrency!!,
@@ -171,6 +177,22 @@ class MainViewModel @Inject constructor(
                                 )
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getRecentTransactions() {
+        viewModelScope.launch {
+            getApprovedTransactions().collect { approvedTransaction ->
+                if (approvedTransaction.isNotEmpty()) {
+                    emitState {
+                        copy(
+                            approvedTransactionsState = ApprovedTransactionsState.Content(
+                                approvedTransaction
+                            )
+                        )
                     }
                 }
             }

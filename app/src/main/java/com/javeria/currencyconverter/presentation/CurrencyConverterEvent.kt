@@ -10,4 +10,6 @@ sealed class CurrencyConverterEvent {
         CurrencyConverterEvent()
     data object DialogDismissOrTransactionDenied : CurrencyConverterEvent()
     data class SaveConversionInLocal(val quotedRate: QuotedRate) : CurrencyConverterEvent()
+    data object ApprovedTransactionsClicked : CurrencyConverterEvent()
+    data object BottomSheetDismissed : CurrencyConverterEvent()
 }
