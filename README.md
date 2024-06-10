@@ -1,7 +1,8 @@
 # Currency converter
 - A simple Currency exchange app using API - https://freecurrencyapi.com/docs/
 
-![Screenshot_20240608_031135.png](..%2F..%2F..%2FDesktop%2FScreenshot_20240608_031135.png)
+<img width="382" alt="image" src="https://github.com/javeria-amatul/currencyconverter/assets/16822342/fb97cd4e-909a-4958-b837-fb34fb4eb1f2">
+
 
 ## Features
 
